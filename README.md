@@ -2,6 +2,8 @@
 
 A casual math puzzle game where you stack numbers in ascending order. Don't let the tower tumble!
 
+[![Play Now](https://img.shields.io/badge/Play_Now-Live_Demo-success?style=for-the-badge&logo=github)](https://swindon.github.io/tumbling-towers/)
+
 ![Pixel Art Style](https://img.shields.io/badge/Style-Pixel_Art-facc15?style=flat-square&logoColor=black)
 ![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)
