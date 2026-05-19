@@ -47,6 +47,7 @@ export default function App() {
   
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showLevelCompleteModal, setShowLevelCompleteModal] = useState(false);
+  const [showHomeConfirmModal, setShowHomeConfirmModal] = useState(false);
 
   useEffect(() => {
     if (gameState === 'game_over') {
@@ -107,6 +108,14 @@ export default function App() {
       if (!canPlaceAnywhere(newTower, newDigits)) {
         setGameState('game_over');
       }
+    }
+  };
+
+  const handleHomeClick = () => {
+    if (gameState === 'playing') {
+      setShowHomeConfirmModal(true);
+    } else {
+      setGameState('menu');
     }
   };
 
@@ -211,7 +220,7 @@ export default function App() {
       {/* Header */}
       <div className="flex justify-between items-center text-white mb-6 max-w-2xl mx-auto w-full relative z-20">
         <div className="flex items-center gap-4">
-          <button onClick={() => setGameState('menu')} className="p-2 bg-white text-black pixel-border-sm pixel-shadow-sm hover:bg-gray-200 active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
+          <button onClick={handleHomeClick} className="p-2 bg-white text-black pixel-border-sm pixel-shadow-sm hover:bg-gray-200 active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
             <Home size={24} />
           </button>
           <div className="text-2xl md:text-3xl font-bold tracking-wider text-black uppercase">
@@ -291,6 +300,24 @@ export default function App() {
               <Button primary onClick={() => startLevel(level + 1)}>
                 Next Level <Play className="inline ml-1" size={18} fill="currentColor" />
               </Button>
+            </div>
+          </Modal>
+        )}
+
+        {showHomeConfirmModal && (
+          <Modal>
+            <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-[2px_2px_0_rgba(0,0,0,1)] uppercase">
+              Exit Game?
+            </h2>
+            <p className="text-xl text-white mb-8 drop-shadow-[1px_1px_0_rgba(0,0,0,1)]">
+              Your current progress will be lost!
+            </p>
+            <div className="flex gap-4">
+              <Button onClick={() => setShowHomeConfirmModal(false)}>Stay</Button>
+              <Button primary onClick={() => {
+                setShowHomeConfirmModal(false);
+                setGameState('menu');
+              }}>Exit</Button>
             </div>
           </Modal>
         )}
