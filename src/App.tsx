@@ -40,6 +40,10 @@ export default function App() {
   const [gameState, setGameState] = useState<GameState>('menu');
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
+  const [topScore, setTopScore] = useState<number>(() => {
+    const saved = localStorage.getItem('tumbling_towers_top_score');
+    return saved ? parseInt(saved, 10) : 0;
+  });
   
   const [tower, setTower] = useState<(number | null)[]>([]);
   const [digits, setDigits] = useState<[number, number]>([0, 0]);
@@ -48,6 +52,13 @@ export default function App() {
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showLevelCompleteModal, setShowLevelCompleteModal] = useState(false);
   const [showHomeConfirmModal, setShowHomeConfirmModal] = useState(false);
+
+  useEffect(() => {
+    if (score > topScore) {
+      setTopScore(score);
+      localStorage.setItem('tumbling_towers_top_score', score.toString());
+    }
+  }, [score, topScore]);
 
   useEffect(() => {
     if (gameState === 'game_over') {
@@ -121,7 +132,12 @@ export default function App() {
 
   if (gameState === 'menu') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 font-pixel relative overflow-hidden pb-32 md:pb-40">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 md:p-8 font-pixel relative overflow-hidden pb-32 md:pb-40">
+        <div className="absolute top-4 md:top-8 left-0 right-0 max-w-2xl mx-auto w-full px-4 md:px-8 flex justify-end z-20">
+          <div className="text-[10px] md:text-xs font-bold text-black uppercase tracking-widest bg-white/50 px-2 py-0.5 pixel-border-sm scale-90 origin-right">
+            Top: {topScore}
+          </div>
+        </div>
         <CloudsBackground />
         {/* City Silhouette Background */}
         <div className="absolute bottom-32 md:bottom-40 left-0 right-0 h-64 bg-[#4a90e2] opacity-50 z-0" style={{ clipPath: 'polygon(0 100%, 0 60%, 10% 60%, 10% 40%, 20% 40%, 20% 70%, 30% 70%, 30% 30%, 40% 30%, 40% 50%, 50% 50%, 50% 20%, 60% 20%, 60% 60%, 70% 60%, 70% 40%, 80% 40%, 80% 80%, 90% 80%, 90% 50%, 100% 50%, 100% 100%)' }}></div>
@@ -218,7 +234,7 @@ export default function App() {
       <div className="absolute bottom-32 md:bottom-40 left-0 right-0 h-64 bg-[#4a90e2] opacity-50 z-0" style={{ clipPath: 'polygon(0 100%, 0 60%, 10% 60%, 10% 40%, 20% 40%, 20% 70%, 30% 70%, 30% 30%, 40% 30%, 40% 50%, 50% 50%, 50% 20%, 60% 20%, 60% 60%, 70% 60%, 70% 40%, 80% 40%, 80% 80%, 90% 80%, 90% 50%, 100% 50%, 100% 100%)' }}></div>
       
       {/* Header */}
-      <div className="flex justify-between items-center text-white mb-6 max-w-2xl mx-auto w-full relative z-20">
+      <div className="flex justify-between items-start text-white mb-6 max-w-2xl mx-auto w-full relative z-20">
         <div className="flex items-center gap-4">
           <button onClick={handleHomeClick} className="p-2 bg-white text-black pixel-border-sm pixel-shadow-sm hover:bg-gray-200 active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
             <Home size={24} />
@@ -227,8 +243,13 @@ export default function App() {
             LVL. {level}
           </div>
         </div>
-        <div className="text-xl md:text-2xl font-bold bg-white text-black px-4 py-2 pixel-border-sm pixel-shadow-sm uppercase">
-          Score: {score}
+        <div className="flex flex-col items-end">
+          <div className="text-xl md:text-2xl font-bold bg-white text-black px-4 py-2 pixel-border-sm pixel-shadow-sm uppercase">
+            Score: {score}
+          </div>
+          <div className="text-[10px] md:text-xs font-bold text-black uppercase tracking-widest mt-1 bg-white/50 px-2 py-0.5 pixel-border-sm scale-90 origin-right">
+            Top: {topScore}
+          </div>
         </div>
       </div>
       
